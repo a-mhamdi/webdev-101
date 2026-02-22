@@ -1,5 +1,5 @@
 function getData() {
-    fetch('/users', {
+    fetch('/students', {
         method: 'GET'
     })
         .then(response => response.json())
@@ -20,7 +20,7 @@ function saveData() {
     }
 
     // Save the input data to `sqlite.db` using an API endpoint
-    fetch('/users', {
+    fetch('/students', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ function saveData() {
 
 function clearData() {
 
-    fetch('/users', {
+    fetch('/students', {
         method: 'DELETE',
 
     })
