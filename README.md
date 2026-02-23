@@ -4,6 +4,8 @@
 >
 > A beginner-friendly introduction to web development — from writing your first webpage to building a backend `API` with a real database.
 
+![Web Dev 101](webdev-101.png)
+
 This repository is designed to help students understand how the web actually works, by building things hands-on. We cover the frontend (what users see), the backend (the server behind the scenes), and the database (where data is stored and retrieved).
 
 ---
@@ -94,7 +96,8 @@ This project exposes a simple REST API for managing a list of students. All rout
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/students` | Add a new student to the database |
-| `GET` | `/students/:id` | Retrieve a student by thier ID from the database |
+| `GET` | `/students` | Retrieve all students from the database |
+| `GET` | `/students/:id` | Retrieve a student by their ID from the database |
 | `PUT` | `/students/:id` | Update an existing student's data in the database |
 | `DELETE` | `/students/:id` | Remove a student by their ID from the database |
 
