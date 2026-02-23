@@ -17,24 +17,48 @@ app.use(express.json()); // Middleware to parse JSON bodies
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    res.status(200).send('HTML rendered successfully!');
+app.post('/students', (req, res) => {
+    const { id, name, specialty, score } = req.body;
+    db.prepare(`INSERT INTO students (id, name, specialty, score) VALUES (?, ?, ?, ?)`).run(id, name, specialty, score);
+    res.json({ message: 'Data saved successfully!' });
 });
 
 app.get('/students', (req, res) => {
     const students = db.prepare(`SELECT * FROM students`).all();
-    res.json(students);
-})
-
-app.post('/students', (req, res) => {
-    const { name, specialty, score } = req.body;
-    db.prepare(`INSERT INTO students (name, specialty, score) VALUES (?, ?, ?)`).run(name, specialty, score);
-    res.json({ message: 'Data saved successfully!' });
+    if (students && students.length > 0) {
+        res.json(students);
+    } else {
+        res.status(404).json({ error: 'No students found' });
+    }
 });
 
-app.delete('/students', (req, res) => {
-    db.prepare('DELETE FROM students').run();
+app.get('/students/:id', (req, res) => {
+    const id = req.params.id;
+    const student = db.prepare(`SELECT * FROM students WHERE id = ?`).get(id);
+    if (student) {
+        res.json(student);
+    } else {
+        res.status(404).json({ error: 'Student not found' });
+    }
+})
+
+app.put('/students/:id', (req, res) => {
+    const id = req.params.id;
+    const { name, specialty, score } = req.body;
+    const result = db.prepare(`UPDATE students SET name = ?, specialty = ?, score = ? WHERE id = ?`).run(name, specialty, score, id);
+    if (result.changes === 0) {
+        res.status(404).json({ error: 'Student not found' });
+    } else {
+        res.json({ message: 'Data updated successfully!' });
+    }
+});
+
+app.delete('/students/:id', (req, res) => {
+    const id = req.params.id;
+    const result = db.prepare(`DELETE FROM students WHERE id = ?`).run(id);
+    if (result.changes === 0) {
+        res.status(404).json({ error: 'Student not found' });
+    }
     res.json({ message: 'All records cleared' });
 });
 
